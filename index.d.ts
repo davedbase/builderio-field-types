@@ -16,9 +16,15 @@ declare type BuilderFields<T> = T extends object
   : T;
 
 declare type GenerateItem<T> = T extends {
+  type: "list";
   subFields: infer S extends readonly any[];
 }
   ? GenerateItems<S>[]
+  : T extends {
+      type: "object";
+      subFields: infer S extends readonly any[];
+    }
+  ? GenerateItems<S>
   : T extends { type: infer Type extends string }
   ? Type extends "string"
     ? T extends { enum: infer SE extends readonly string[] }
